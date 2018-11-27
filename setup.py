@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 import boto3
 
@@ -107,8 +108,9 @@ def _create_function(funcName):
     roleArn = _get_iam_role()
 
     # Compress This Directory
-    file_name = 'zf.zip',
+    file_name = 'zf.zip'
     cli_zip_cmd = 'zip -r '+file_name+' * -x .git/ .vscode/ @'
+    os.system(cli_zip_cmd)
     zipFile = open('zf.zip','rb').read()
 
     response = LAMBDA.create_function(
@@ -124,7 +126,16 @@ def _create_function(funcName):
 
 
 
-_get_iam_role()
+# Execute Script
+if __name__ == "__main__":
+    if len(sys.argv) > 1:
+        command = sys.argv[1]
+    else:
+        print("Enter API Name: ")
+        projname = input()
+        _create_function(projname)
+
+
 
 
 

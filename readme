@@ -1,5 +1,9 @@
 This Project is suitable for Unix Environment
-> uset setup.py to start creating serverless api
+
+# SETUP Lambda Function
+python setup.py
+Enter API Name: <api name>
+
 
 
 
