@@ -2,6 +2,7 @@ import os
 import sys
 import json
 import boto3
+from util import settings
 
 # Initialize AWS Controllers
 global DYNAMODB
@@ -133,8 +134,8 @@ if __name__ == "__main__":
     else:
         print("Enter API Name: ")
         projname = input()
+        settings._update('function_name',projname)
         _create_function(projname)
-
 
 
 
