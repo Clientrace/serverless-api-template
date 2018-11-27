@@ -114,15 +114,17 @@ def _create_function(funcName):
     response = LAMBDA.create_function(
         FunctionName = funcName,
         Runtime = 'python3.6',
-        Role = _get_iam_role()
+        Role = roleArn,
+        Handler = 'index.lambda_handler',
+        Code = {
+            "ZipFile" : zipFile
+        },
+        Timeout = 900
     )
 
 
 
 _get_iam_role()
-
-
-
 
 
 
