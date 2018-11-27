@@ -126,21 +126,25 @@ def _create_function(funcName):
     )
 
 
+# Add API service
+def _create_service(service_name):
+    template = open('services/template').read()
+    fwriter = open('services/'+service_name+'.py','w')
+    fwriter.write(template)
+    fwriter.close()
+
 
 # Execute Script
 if __name__ == "__main__":
     if len(sys.argv) > 1:
         command = sys.argv[1]
+        if(command == 'create_service'):
+            print("Service Name: ")
+            service_name = input()
+            _create_service(service_name)
     else:
         print("Enter API Name: ")
         projname = input()
         settings._update('function_name',projname)
         _create_function(projname)
-
-
-
-
-
-
-
 

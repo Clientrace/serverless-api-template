@@ -1,0 +1,19 @@
+from _aws import dynamodb
+
+# Declare params checker
+global TABLENAME
+global PARAMS
+
+
+TABLENAME = ''
+PARAMS = {}
+
+
+# Execute Service
+def _exe(route,querystring,payload):
+    return {
+        'status' : 405
+    }
+
+
+
