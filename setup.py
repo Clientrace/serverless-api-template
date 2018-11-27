@@ -13,6 +13,16 @@ IAM_client = boto3.client('iam')
 IAM_res = boto3.resource('iam')
     
 
+# IAM Roles to Attach
+global ROLES_ARN
+ROLES_ARN = [
+    'arn:aws:iam::aws:policy/AmazonSQSFullAccess', # SQS Full Access
+    'arn:aws:iam::aws:policy/AWSLambdaFullAccess', # LAMBDA Full Access
+    'arn:aws:iam::aws:policy/AmazonAPIGatewayInvokeFullAccess', # API Gateway Invocation Full Access
+    'arn:aws:iam::aws:policy/CloudWatchFullAccess', # Cloudwatch Full Access
+    'arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess' # Dynamodb Full Access
+]
+
 
 # Create Dynamodb Table
 def _create_table(tablename,indexName):
@@ -39,22 +49,14 @@ def _create_table(tablename,indexName):
     )
 
 
-# Load Local Policy Document
-def load_iam_policies():
-    roles = {}
-    for json_file in os.listdir('iam_policy'):
-        policy = open('iam_policy/'+json_file).read()
-        policy_name = json_file.split('.')[0]
-        roles[policy_name] = policy
-
-    return roles
-
-
 # AWS IAM Role Configuration
 def _get_iam_role():
     global IAM_res
     global IAM_client
+    global ROLES_ARN
 
+    roleArn = ''
+    # Try create serverless api
     try:
         response = IAM_client.create_role(
             RoleName = 'serverless-api',
@@ -71,25 +73,38 @@ def _get_iam_role():
                 ]
             })
         )
+
+        api_role = IAM_res.Role('serverless-api')
+        roleArn = api_role.arn
+        # attach policies
+        for role in ROLES_ARN:
+            print(role)
+            api_role.attach_policy(
+                PolicyArn = role
+            )
+            
+        api_role.reload()
+
         print('==> Role created')
     except Exception as e:
         # Role resource Name already exist
         if('(EntityAlreadyExists)' in str(e)):
+            api_role = IAM_res.Role('serverless-api')
+            roleArn = api_role.arn
             print('==> Role created')
         else:
             print('Something went wrong.')
             print(str(e))
 
-    # attach policies
-    roles = load_iam_policies()
-
-
-
+    return roleArn
     
 
 # Create AWS Lambda Function
 def _create_function(funcName):
     global LAMBDA
+
+    # Generate IAM Role
+    roleArn = _get_iam_role()
 
     # Compress This Directory
     file_name = 'zf.zip',
@@ -99,13 +114,12 @@ def _create_function(funcName):
     response = LAMBDA.create_function(
         FunctionName = funcName,
         Runtime = 'python3.6',
-        Role = ''
+        Role = _get_iam_role()
     )
 
 
 
 _get_iam_role()
-
 
 
 
