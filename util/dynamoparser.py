@@ -2,11 +2,11 @@
 
 # Parse Dynamodb Return
 def parse(items):
-    print(items)
 
     ret = {}
     for key in items:
         if(type(items[key]).__name__ is not 'dict'):
+            ret[key] = items[key]
             continue
 
         if('BOOL' in items[key]):
