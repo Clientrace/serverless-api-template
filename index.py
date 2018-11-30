@@ -16,7 +16,7 @@ def _exe(event,context):
     querystring = event['params']['querystring']
 
     # Service Rerturn Data
-    retData = service._exe(path['service'],path['path'],headers,querystring,body)
+    retData = service._exe(path['service'],path['path'],header,querystring,body)
 
     # Parse Dynamo List Return
     if(type(retData).__name__=='list'):
