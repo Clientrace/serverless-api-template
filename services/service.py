@@ -29,7 +29,7 @@ def _exe(service,route,querystring,body):
     # Service Function
     service_func = service.PARAMS[route]['function']
     service_method = service.PARAMS[route]['method']
-    serivce_params = service.PARAMS[route]['params']
+    service_params = service.PARAMS[route]['params']
 
 
     # Validate Required Params
