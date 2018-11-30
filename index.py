@@ -1,11 +1,12 @@
-from services import service
+import traceback
 from util import config
+from services import service
 from util import dynamoparser
 
 
 
 # Main API Execution Point
-def lambda_handler(event,context):
+def _exe(event,context):
     # Log Event
     print(event)
 
@@ -15,7 +16,7 @@ def lambda_handler(event,context):
     querystring = event['params']['querystring']
 
     # Service Rerturn Data
-    retData = service._exe(route,querystring,body)
+    retData = service._exe(path['service'],path['path'],headers,querystring,body)
 
     # Parse Dynamo List Return
     if(type(retData).__name__=='list'):
@@ -30,10 +31,20 @@ def lambda_handler(event,context):
     if(type(retData).__name__=='dict'):
         return dynamoparser.parse(retData)
 
-
-
     return dynamoparser.parse(retData)
 
+
+# Lambda Execution Point
+def lambda_handler(event,context):
+    try:
+        return _exe(event,context)
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+    return {
+        'status' : 500,
+        'description' : 'Internal Server Error'
+    }
+
+
     
-
-

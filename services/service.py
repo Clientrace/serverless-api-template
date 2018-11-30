@@ -15,7 +15,7 @@ def _validate(reqParams,method,querystring,payload):
 
 
 # Execute Service Function
-def _exe(service,route,querystring,body):
+def _exe(service,route,headers,querystring,body):
     # Get API Service
     service = __import__("services."+service,fromlist=[service])
 
@@ -42,11 +42,16 @@ def _exe(service,route,querystring,body):
 
     # Execute Service
     service_exe = getattr(service,service_func)
+    requestData = {
+        'headers' : headers
+    }
     if(service_method == 'GET'):
-        return service_exe(querystring)
+        requestData['payload'] = querystring
+        return service_exe(requestData)
 
     if(service_method == 'POST'):
-        return service_exe(body)
+        requestData['payload'] = body
+        return service_exe(requestData)
 
 
     return {
@@ -57,4 +62,4 @@ def _exe(service,route,querystring,body):
 
 
 
-    
+ 
