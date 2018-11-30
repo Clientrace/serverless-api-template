@@ -87,10 +87,10 @@ def delete_item(tableName,key):
 
 # Query db item
 def query(tableName,indexName,filterExp,expAttrbNames,expAttrbValues,limit,exclusiveStartKey=None):
-    global DYNAMO
+    global DYNAMODB
 
     if(exclusiveStartKey):
-        response = DYNAMO.query(
+        response = DYNAMODB.query(
             TableName = tableName,
             IndexName = indexName,
             Limit = limit,
@@ -101,7 +101,7 @@ def query(tableName,indexName,filterExp,expAttrbNames,expAttrbValues,limit,exclu
             ExpressionAttributeValues = expAttrbValues
         )
     else:
-        response = DYNAMO.query(
+        response = DYNAMODB.query(
             TableName = tableName,
             IndexName = indexName,
             Limit = limit,
@@ -113,7 +113,14 @@ def query(tableName,indexName,filterExp,expAttrbNames,expAttrbValues,limit,exclu
 
     return response
 
+# Get All Table Items
+def scan_all(tableName):
+    global DYNAMODB
 
-    
+    paginator = DYNAMODB.get_paginator('scan')
+    filterExp = {
+        'TableName' : tableName,
+        'Limit' : 5
+    }
 
 
