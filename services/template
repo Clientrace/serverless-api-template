@@ -7,6 +7,14 @@ global TABLENAME
 global CURDATE
 global PARAMS
 
+# [ PARAMS FORMAT ]
+# {
+#     '<route-name>' : {
+#         '<method>' : 'GET' | 'POST',
+#         '<parmas>' : [<params list>]
+#     }
+# }
+
 
 TABLENAME = ''
 CURDATE = str(datetime.datetime.now()).replace(' ','T')
