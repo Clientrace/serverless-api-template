@@ -28,7 +28,7 @@ def lambda_handler(event,context):
 
     # Parse Dynamod Dictionary Return 
     if(type(retData).__name__=='dict'):
-        return dynamoData.parse(retData)
+        return dynamoparser.parse(retData)
 
 
 
