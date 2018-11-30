@@ -22,11 +22,6 @@ CURDATE = str(datetime.datetime.now()).replace(' ','T')
 PARAMS = {}
 
 
-# Execute Service
-def _exe(route,querystring,payload):
-    return {
-        'status' : 405
-    }
 
 
 
