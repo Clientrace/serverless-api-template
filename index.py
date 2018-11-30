@@ -18,7 +18,7 @@ def lambda_handler(event,context):
     retData = service._exe(route,querystring,body)
 
     # Parse Dynamo List Return
-    if(type(ret).__name__=='list'):
+    if(type(retData).__name__=='list'):
         parsedList = []
         for data in retData:
             parsedList.append(
@@ -27,7 +27,7 @@ def lambda_handler(event,context):
         return parsedList
 
     # Parse Dynamod Dictionary Return 
-    if(type(ret).__name__=='dict'):
+    if(type(retData).__name__=='dict'):
         return dynamoData.parse(retData)
 
 
