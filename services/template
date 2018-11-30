@@ -1,11 +1,15 @@
 from _aws import dynamodb
+import datetime
+
 
 # Declare params checker
 global TABLENAME
+global CURDATE
 global PARAMS
 
 
 TABLENAME = ''
+CURDATE = str(datetime.datetime.now()).replace(' ','T')
 PARAMS = {}
 
 
